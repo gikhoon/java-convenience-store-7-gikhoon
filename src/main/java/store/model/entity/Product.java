@@ -1,5 +1,7 @@
 package store.model.entity;
 
+import org.assertj.core.util.Strings;
+
 public class Product {
     private final String name;
     private final ProductPrice price;
@@ -38,6 +40,9 @@ public class Product {
     }
 
     public String getPromotionName() {
-        return promotion.getName();
+        if (promotion != null) {
+            return promotion.getName();
+        }
+        return "";
     }
 }
