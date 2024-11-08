@@ -1,15 +1,15 @@
 package store.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Promotion {
     private final String name;
     private final Integer buy;
     private final Integer get;
-    private final LocalDateTime startDay;
-    private final LocalDateTime endDay;
+    private final LocalDate startDay;
+    private final LocalDate endDay;
 
-    public Promotion(String name, Integer buy, Integer get, LocalDateTime startDay, LocalDateTime endDay) {
+    public Promotion(String name, Integer buy, Integer get, LocalDate startDay, LocalDate endDay) {
         this.name = name;
         this.buy = buy;
         this.get = get;
