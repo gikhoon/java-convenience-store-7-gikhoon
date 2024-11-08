@@ -6,7 +6,7 @@ import java.util.Optional;
 import store.model.entity.Promotion;
 
 public class PromotionRepository {
-    private List<Promotion> promotions = new ArrayList<>();
+    private static List<Promotion> promotions = new ArrayList<>();
 
     public void saveAll(List<Promotion> promotion) {
         promotions.addAll(promotion);
