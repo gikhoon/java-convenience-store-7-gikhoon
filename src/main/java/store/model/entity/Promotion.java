@@ -20,4 +20,8 @@ public class Promotion {
     public boolean isEqualName(String name) {
         return this.name.equals(name);
     }
+
+    public String getName() {
+        return name;
+    }
 }

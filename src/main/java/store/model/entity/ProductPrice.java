@@ -9,6 +9,10 @@ public class ProductPrice {
         this.price = price;
     }
 
+    public Integer getPrice() {
+        return price;
+    }
+
     @Override
     public String toString() {
         return String.format(

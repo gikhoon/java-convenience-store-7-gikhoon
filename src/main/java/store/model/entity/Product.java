@@ -12,4 +12,32 @@ public class Product {
         this.quantity = new ProductQuantity(quantity);
         this.promotion = promotion;
     }
+
+    public int getPrice() {
+        return price.getPrice();
+    }
+
+    public String getPriceToString() {
+        return price.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity.getQuantity();
+    }
+
+    public String getQuantityToString() {
+        return quantity.toString();
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public String getPromotionName() {
+        return promotion.getName();
+    }
 }
