@@ -3,7 +3,7 @@ package store.model.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import store.model.Promotion;
+import store.model.entity.Promotion;
 
 public class PromotionRepository {
     private List<Promotion> promotions = new ArrayList<>();
