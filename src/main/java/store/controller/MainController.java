@@ -5,5 +5,6 @@ public class MainController {
 
     public void run() {
         initController.initPromotions();
+        initController.initProducts();
     }
 }

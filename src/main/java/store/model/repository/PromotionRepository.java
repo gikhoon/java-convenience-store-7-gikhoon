@@ -10,4 +10,11 @@ public class PromotionRepository {
     public void saveAll(List<Promotion> promotion) {
         promotions.addAll(promotion);
     }
+
+    public Promotion findByName(String name) {
+        return promotions.stream()
+                .filter(promotion -> promotion.isEqualName(name))
+                .findFirst()
+                .orElse(null);
+    }
 }
