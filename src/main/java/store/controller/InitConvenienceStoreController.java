@@ -1,10 +1,17 @@
 package store.controller;
 
+import static store.constant.InitConvenienceStoreConstant.PROMOTION_BUY_INDEX;
+import static store.constant.InitConvenienceStoreConstant.PROMOTION_END_DATE_INDEX;
+import static store.constant.InitConvenienceStoreConstant.PROMOTION_GET_INDEX;
+import static store.constant.InitConvenienceStoreConstant.PROMOTION_NAME_INDEX;
+import static store.constant.InitConvenienceStoreConstant.PROMOTION_START_DATE_INDEX;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import store.constant.InitConvenienceStoreConstant;
 import store.exception.ErrorCode;
@@ -33,7 +40,17 @@ public class InitConvenienceStoreController {
     }
 
     private Promotion createPromotion(List<String> promotionData) {
-        return null;
+        return new Promotion(
+                promotionData.get(PROMOTION_NAME_INDEX),
+                Integer.parseInt(promotionData.get(PROMOTION_BUY_INDEX)),
+                Integer.parseInt(promotionData.get(PROMOTION_GET_INDEX)),
+                parseToLocalDate(promotionData.get(PROMOTION_START_DATE_INDEX)),
+                parseToLocalDate(promotionData.get(PROMOTION_END_DATE_INDEX))
+        );
+    }
+
+    private LocalDate parseToLocalDate(String localDateTime) {
+        return LocalDate.parse(localDateTime);
     }
 
     private BufferedReader makeBufferedReader(String filePath) {
