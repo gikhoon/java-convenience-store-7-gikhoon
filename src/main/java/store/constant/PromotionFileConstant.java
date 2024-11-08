@@ -1,7 +1,6 @@
 package store.constant;
 
-public class InitConvenienceStoreConstant {
-    public static final String PRODUCT_FILE = "products.md";
+public class PromotionFileConstant {
     public static final String PROMOTION_FILE = "promotions.md";
     public static final int PROMOTION_NAME_INDEX = 0;
     public static final int PROMOTION_BUY_INDEX = 1;
