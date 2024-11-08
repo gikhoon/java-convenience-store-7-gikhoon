@@ -16,15 +16,16 @@ import java.util.List;
 import store.constant.InitConvenienceStoreConstant;
 import store.exception.ErrorCode;
 import store.model.Promotion;
+import store.model.repository.PromotionRepository;
 import store.util.ParseConvenienceStoreInitUtil;
 
 public class InitConvenienceStoreController {
+    private final PromotionRepository promotionRepository = new PromotionRepository();
+
     public void initPromotions() {
         try (BufferedReader reader = makeBufferedReader(InitConvenienceStoreConstant.PROMOTION_FILE)) {
-            List<String> promotionData = reader.lines()
-                    .skip(1)
-                    .toList();
-            List<Promotion> promotions = mapToPromotion(promotionData);
+            List<String> promotionData = reader.lines().skip(1).toList();
+            promotionRepository.saveAll(mapToPromotion(promotionData));
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
