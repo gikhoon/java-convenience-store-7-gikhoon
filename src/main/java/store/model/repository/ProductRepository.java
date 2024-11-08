@@ -10,4 +10,8 @@ public class ProductRepository {
     public void saveAll(List<Product> product) {
         products.addAll(product);
     }
+
+    public List<Product> findAll() {
+        return products;
+    }
 }
