@@ -3,7 +3,7 @@ package store.util;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParseConvenienceStoreInitUtil {
+public class ConvenienceStoreInitParser {
     private static final String SEPARATOR = ",";
 
     public static List<String> parseData(String data) {

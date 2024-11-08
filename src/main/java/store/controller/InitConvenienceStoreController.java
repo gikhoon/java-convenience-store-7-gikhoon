@@ -20,7 +20,7 @@ import store.model.entity.Product;
 import store.model.entity.Promotion;
 import store.model.repository.ProductRepository;
 import store.model.repository.PromotionRepository;
-import store.util.ParseConvenienceStoreInitUtil;
+import store.util.ConvenienceStoreInitParser;
 
 public class InitConvenienceStoreController {
     private final PromotionRepository promotionRepository = new PromotionRepository();
@@ -39,7 +39,7 @@ public class InitConvenienceStoreController {
 
     private List<Product> mapToProduct(List<String> products) {
         return products.stream()
-                .map(ParseConvenienceStoreInitUtil::parseData)
+                .map(ConvenienceStoreInitParser::parseData)
                 .map(this::createProduct)
                 .toList();
     }
@@ -74,7 +74,7 @@ public class InitConvenienceStoreController {
 
     private List<Promotion> mapToPromotion(List<String> promotionData) {
         return promotionData.stream()
-                .map(ParseConvenienceStoreInitUtil::parseData)
+                .map(ConvenienceStoreInitParser::parseData)
                 .map(this::createPromotion)
                 .toList();
     }
