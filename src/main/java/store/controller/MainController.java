@@ -4,11 +4,15 @@ public class MainController {
     private final InitConvenienceStoreController initController = new InitConvenienceStoreController();
 
     public void run() {
-        initConvenienceStore();
+        initProducts();
+        initPromotions();
     }
 
-    private void initConvenienceStore() {
+    private void initProducts() {
         initController.initProducts();
+    }
+
+    private void initPromotions() {
         initController.initPromotions();
     }
 }
