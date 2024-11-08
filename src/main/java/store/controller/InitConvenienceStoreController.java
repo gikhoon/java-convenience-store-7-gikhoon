@@ -18,16 +18,18 @@ import store.constant.PromotionFileConstant;
 import store.exception.ErrorCode;
 import store.model.Product;
 import store.model.Promotion;
+import store.model.repository.ProductRepository;
 import store.model.repository.PromotionRepository;
 import store.util.ParseConvenienceStoreInitUtil;
 
 public class InitConvenienceStoreController {
     private final PromotionRepository promotionRepository = new PromotionRepository();
+    private final ProductRepository productRepository = new ProductRepository();
 
     public void initProducts() {
         try (BufferedReader reader = makeBufferedReader(ProductFileConstant.PRODUCT_FILE)) {
             List<String> productData = reader.lines().skip(1).toList();
-            List<Product> products = mapToProduct(productData);
+            productRepository.saveAll(mapToProduct(productData));
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
@@ -43,8 +45,8 @@ public class InitConvenienceStoreController {
     }
 
     private Product createProduct(List<String> productData) {
-        Promotion promotion = promotionRepository.findByName(
-                productData.get(ProductFileConstant.PRODUCT_PROMOTION_INDEX));
+        Promotion promotion = findPromotionByName(productData
+                .get(ProductFileConstant.PRODUCT_PROMOTION_INDEX));
 
         return new Product(
                 productData.get(ProductFileConstant.PRODUCT_NAME_INDEX),
@@ -52,6 +54,11 @@ public class InitConvenienceStoreController {
                 Integer.parseInt(productData.get(ProductFileConstant.PRODUCT_QUANTITY_INDEX)),
                 promotion
         );
+    }
+
+    private Promotion findPromotionByName(String name) {
+        return promotionRepository.findByName(name)
+                .orElse(null);
     }
 
     public void initPromotions() {
