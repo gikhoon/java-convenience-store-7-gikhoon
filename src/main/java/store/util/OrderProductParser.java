@@ -1,14 +1,14 @@
 package store.util;
 
+import static store.constant.OrderProductConstant.PRODUCT_SUFFIX;
+import static store.constant.OrderProductConstant.PRODUCT_SPLIT_SEPARATOR;
+import static store.constant.OrderProductConstant.PRODUCT_PREFIX;
+
 import java.util.Arrays;
 import java.util.List;
 import store.exception.ErrorCode;
 
 public class OrderProductParser {
-    private static final String PRODUCT_SPLIT_SEPARATOR = ",";
-    private static final String PRODUCT_START_PREFIX = "[";
-    private static final String PRODUCT_END_PREFIX = "]";
-
     public static List<String> parseOrder(String orders) {
         if (isEmpty(orders) || !isFormatValid(orders)) {
             throw new IllegalArgumentException(ErrorCode.ORDER_PRODUCT_FORMAT_ERROR.getMessage());
@@ -21,7 +21,7 @@ public class OrderProductParser {
 
     private static boolean isFormatValid(String orders) {
         orders = orders.trim();
-        return orders.startsWith(PRODUCT_START_PREFIX) && orders.endsWith(PRODUCT_END_PREFIX);
+        return orders.startsWith(PRODUCT_PREFIX) && orders.endsWith(PRODUCT_SUFFIX);
     }
 
     private static boolean isEmpty(String orders) {
