@@ -10,7 +10,7 @@ import store.model.entity.Product;
 import store.model.repository.ProductRepository;
 
 public class ProductService {
-    private static final ProductRepository productRepository = new ProductRepository();
+    private final ProductRepository productRepository = new ProductRepository();
 
     public ProductInfoDto getAllProductInfos() {
         List<Product> products = productRepository.findAll();
