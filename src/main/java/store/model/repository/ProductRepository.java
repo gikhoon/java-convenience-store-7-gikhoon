@@ -20,4 +20,17 @@ public class ProductRepository {
                 .filter(product -> product.getName().equals(name))
                 .toList();
     }
+
+    public Product findByNameAndIsPromote(String name, boolean isPromote) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .filter(product -> {
+                    if (isPromote) {
+                        return product.getPromotion() != null;
+                    }
+                    return product.getPromotion() == null;
+                })
+                .findFirst()
+                .orElse(null);
+    }
 }

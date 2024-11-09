@@ -12,4 +12,8 @@ public class InputView {
     private String input() {
         return readLine().trim();
     }
+
+    public String inputYesOrNo() {
+        return input();
+    }
 }

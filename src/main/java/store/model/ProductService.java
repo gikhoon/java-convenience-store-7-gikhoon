@@ -1,12 +1,10 @@
 package store.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import store.constant.OrderProductConstant;
 import store.controller.dto.OrderNameInfo;
 import store.controller.dto.ProductInfoDto;
 import store.controller.dto.ProductOrderInfo;
-import store.controller.dto.ProductOrderList;
 import store.exception.ErrorCode;
 import store.model.entity.Product;
 import store.model.repository.ProductRepository;
@@ -30,36 +28,6 @@ public class ProductService {
                 .replace(OrderProductConstant.PRODUCT_SUFFIX, "");
     }
 
-    public ProductOrderList generateProductOrderList(List<OrderNameInfo> orderNameInfos) {
-        List<ProductOrderInfo> orderInfos = new ArrayList<>();
-        for (OrderNameInfo orderNameInfo : orderNameInfos) {
-            List<Product> activeProduct = findActiveProduct(orderNameInfo.productName());
-            orderInfos.addAll(addProductOrderInfo(activeProduct, orderNameInfo.quantity()));
-        }
-        return new ProductOrderList(orderInfos);
-    }
-
-    private List<ProductOrderInfo> addProductOrderInfo(List<Product> activeProduct, Integer quantity) {
-        validateSufficientProductQuantity(activeProduct, quantity);
-
-        List<ProductOrderInfo> productOrderInfos = new ArrayList<>();
-        int remainingQuantity = quantity;
-        remainingQuantity = processProductOrderInfo(activeProduct, true, remainingQuantity, productOrderInfos);
-        processProductOrderInfo(activeProduct, false, remainingQuantity, productOrderInfos);
-        return productOrderInfos;
-    }
-
-    private int processProductOrderInfo(List<Product> products, boolean isPromotion, int remainingQuantity, List<ProductOrderInfo> productOrderInfos) {
-        for (Product product : products) {
-            if (product.isPromote() == isPromotion && remainingQuantity > 0) {
-                int quantityToDeduct = Math.min(product.getQuantity(), remainingQuantity);
-                productOrderInfos.add(new ProductOrderInfo(product, quantityToDeduct));
-                remainingQuantity -= quantityToDeduct;
-            }
-        }
-        return remainingQuantity;
-    }
-
     private void validateSufficientProductQuantity(List<Product> activeProduct, Integer quantity) {
         int totalQuantity = activeProduct.stream()
                 .mapToInt(Product::getQuantity)
@@ -71,11 +39,79 @@ public class ProductService {
 
     private List<Product> findActiveProduct(String productName) {
         List<Product> activeProduct = productRepository.findAllByName(productName).stream()
-                .filter(Product::isPromote)
+                .filter(Product::isActive)
                 .toList();
         if (activeProduct.isEmpty()) {
             throw new IllegalArgumentException(ErrorCode.NO_PRODUCT_EXIST_ERROR.getMessage());
         }
         return activeProduct;
+    }
+
+    public void buyProduct(List<OrderNameInfo> infos) {
+        for (OrderNameInfo info : infos) {
+            List<Product> products = findActiveProduct(info.getProductName());
+            Product promotionProduct = filterPromoteProduction(products);
+            int remainingQuantity = info.getQuantity();
+            if (promotionProduct != null) {
+                remainingQuantity = deductFromPromotionProduct(promotionProduct, remainingQuantity);
+            }
+            if (remainingQuantity > 0) {
+                filterGeneralProduction(products).buy(remainingQuantity);
+            }
+        }
+    }
+
+    private int deductFromPromotionProduct(Product promotionProduct, int quantity) {
+        if (promotionProduct != null && promotionProduct.getQuantity() > 0) {
+            int quantityToDeduct = Math.min(promotionProduct.getQuantity(), quantity);
+            promotionProduct.buy(quantityToDeduct);
+            return quantity - quantityToDeduct;
+        }
+        return quantity;
+    }
+
+    private Product filterPromoteProduction(List<Product> activeProduct) {
+        return activeProduct.stream()
+                .filter(Product::isPromote)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Product filterGeneralProduction(List<Product> activeProduct) {
+        return activeProduct.stream()
+                .filter(product -> !product.isPromote())
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean isPromotionProductExist(String productName) {
+        List<Product> activeProduct = findActiveProduct(productName);
+        Product product = filterPromoteProduction(activeProduct);
+        return product != null;
+    }
+
+    public void checkSufficientQuantity(String name, Integer quantity) {
+        List<Product> activeProduct = findActiveProduct(name);
+        validateSufficientProductQuantity(activeProduct, quantity);
+    }
+
+    public int countExtraProduct(String productName, Integer quantity) {
+        if (!isPromotionProductExist(productName)) {
+            return 0;
+        }
+        List<Product> activeProduct = findActiveProduct(productName);
+        Product product = filterPromoteProduction(activeProduct);
+        return product.countMoreProduct(quantity);
+    }
+
+    public int countRemainProduct(String productName, Integer quantity) {
+        List<Product> activeProduct = findActiveProduct(productName);
+        Product product = filterPromoteProduction(activeProduct);
+        return product.countRemainProduct(quantity);
+    }
+
+    public ProductOrderInfo makeProductOrderInfo(String productName, int quantity, boolean isPromote) {
+        Product product = productRepository.findByNameAndIsPromote(productName, isPromote);
+        return new ProductOrderInfo(product, quantity, isPromote);
     }
 }

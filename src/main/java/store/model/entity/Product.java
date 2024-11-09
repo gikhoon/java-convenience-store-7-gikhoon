@@ -45,9 +45,31 @@ public class Product {
     }
 
     public boolean isPromote() {
+        return promotion != null && promotion.isPromote();
+    }
+
+    public boolean isActive() {
         if (promotion == null) {
             return true;
         }
         return promotion.isPromote();
+    }
+
+    public void buy(Integer amount) {
+        quantity.decreaseQuantity(amount);
+    }
+
+    public int countMoreProduct(int amount) {
+        Integer get = promotion.getGet();
+        if (promotion.canMoreGet(amount) && this.quantity.isSufficient(amount + get)) {
+            return get;
+        }
+        return 0;
+    }
+
+    public int countRemainProduct(Integer amount) {
+        int groupSize = promotion.getGet() + promotion.getBuy();
+        int promotionGroup = Math.min(amount / groupSize, quantity.getQuantity() / groupSize);
+        return amount - promotionGroup * groupSize;
     }
 }

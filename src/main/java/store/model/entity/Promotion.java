@@ -28,7 +28,20 @@ public class Promotion {
                 .toLocalDate();
         return today.isAfter(startDay) && today.isBefore(endDay);
     }
+
     public String getName() {
         return name;
+    }
+
+    public Integer getBuy() {
+        return buy;
+    }
+
+    public Integer getGet() {
+        return get;
+    }
+
+    public boolean canMoreGet(int quantity) {
+        return quantity % (buy + get) == buy;
     }
 }

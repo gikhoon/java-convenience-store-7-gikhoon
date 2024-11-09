@@ -1,5 +1,6 @@
 package store.controller;
 
+import store.controller.dto.ProductOrderList;
 import store.model.ProductService;
 import store.view.OutputView;
 
@@ -13,7 +14,7 @@ public class MainController {
         initController.initPromotions();
         initController.initProducts();
         printProductInfo();
-        productOrderController.orderProduct();
+        ProductOrderList buyProducts = productOrderController.orderProduct();
     }
 
     private void printProductInfo() {
