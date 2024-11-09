@@ -13,8 +13,7 @@ public class ProductOrderController {
     public void orderProduct() {
         while (true) {
             try {
-                List<String> orders = OrderProductParser.parseOrder(inputView.inputProductOrder());
-                validateOrders(orders);
+                List<String> orders = inputProductORder();
                 break;
             } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e.getMessage());
@@ -22,9 +21,15 @@ public class ProductOrderController {
         }
     }
 
+    private List<String> inputProductOrder() {
+        List<String> orders = OrderProductParser.parseOrder(inputView.inputProductOrder());
+        validateOrders(orders);
+        return orders;
+    }
+
     private void validateOrders(List<String> orders) {
         for (String order : orders) {
-            OrderProductValidator.validateProductOrderFormat(order);
+            OrderProductValidator.validateProductOrderFormat(order.trim());
         }
     }
 }
