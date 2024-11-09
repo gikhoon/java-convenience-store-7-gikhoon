@@ -5,6 +5,7 @@ import store.view.OutputView;
 
 public class MainController {
     private final InitConvenienceStoreController initController = new InitConvenienceStoreController();
+    private final ProductOrderController productOrderController = new ProductOrderController();
     private final ProductService productService = new ProductService();
     private final OutputView outputView = new OutputView();
 
@@ -12,6 +13,7 @@ public class MainController {
         initController.initPromotions();
         initController.initProducts();
         printProductInfo();
+        productOrderController.orderProduct();
     }
 
     private void printProductInfo() {
