@@ -14,4 +14,10 @@ public class ProductRepository {
     public List<Product> findAll() {
         return products;
     }
+
+    public List<Product> findAllByName(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .toList();
+    }
 }
