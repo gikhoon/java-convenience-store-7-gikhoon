@@ -1,7 +1,7 @@
 package store.util;
 
 import static store.constant.OrderProductConstant.PRODUCT_SUFFIX;
-import static store.constant.OrderProductConstant.PRODUCT_SPLIT_SEPARATOR;
+import static store.constant.OrderProductConstant.PRODUCTS_SPLIT_SEPARATOR;
 import static store.constant.OrderProductConstant.PRODUCT_PREFIX;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class OrderProductParser {
             throw new IllegalArgumentException(ErrorCode.ORDER_PRODUCT_FORMAT_ERROR.getMessage());
         }
 
-        return Arrays.stream(orders.split(PRODUCT_SPLIT_SEPARATOR))
+        return Arrays.stream(orders.split(PRODUCTS_SPLIT_SEPARATOR))
                 .map(String::trim)
                 .toList();
     }
