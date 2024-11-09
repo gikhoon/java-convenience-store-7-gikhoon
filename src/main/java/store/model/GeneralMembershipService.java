@@ -7,6 +7,7 @@ import store.controller.dto.ProductOrderInfo;
 
 public class GeneralMembershipService implements MembershipService {
     private static final Double DISCOUNT_RATE = 0.3;
+    private static final Integer MAX_DISCOUNT = 8000;
 
     @Override
     public int calculateDisCount(List<ProductOrderInfo> productOrderList) {
@@ -18,7 +19,7 @@ public class GeneralMembershipService implements MembershipService {
             }
             totalCost += calculateCost(productInfos);
         }
-        return (int) Math.round(totalCost * DISCOUNT_RATE);
+        return Math.min((int) Math.round(totalCost * DISCOUNT_RATE), MAX_DISCOUNT);
     }
 
     private int calculateCost(List<ProductOrderInfo> productInfos) {
