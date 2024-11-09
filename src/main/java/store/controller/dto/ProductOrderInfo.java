@@ -20,4 +20,8 @@ public class ProductOrderInfo {
     public Integer getQuantity() {
         return quantity;
     }
+
+    public boolean isPromote() {
+        return isPromote;
+    }
 }

@@ -9,9 +9,14 @@ import store.view.OutputView;
 public class MainController {
     private final InitConvenienceStoreController initController = new InitConvenienceStoreController();
     private final ProductOrderController productOrderController = new ProductOrderController();
+    private final MembershipController membershipController;
     private final ProductService productService = new ProductService();
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
+
+    public MainController(MembershipController membershipController) {
+        this.membershipController = membershipController;
+    }
 
     public void run() {
         initController.initPromotions();
@@ -23,6 +28,7 @@ public class MainController {
         do {
             printProductInfo();
             ProductOrderList buyProducts = productOrderController.orderProduct();
+            int discount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
             outputView.printReorder();
         } while (YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo()));
     }

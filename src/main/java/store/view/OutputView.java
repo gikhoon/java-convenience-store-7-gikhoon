@@ -2,6 +2,7 @@ package store.view;
 
 import static store.constant.FormatConstant.EXTRA_ORDER_FORMAT;
 import static store.constant.FormatConstant.REMAIN_ORDER_FORMAT;
+import static store.constant.ViewMessageConstant.MEMBERSHIP_MESSAGE;
 import static store.constant.ViewMessageConstant.REORDER_MESSAGE;
 import static store.constant.ViewMessageConstant.WELCOME_MESSAGE;
 
@@ -36,5 +37,9 @@ public class OutputView {
 
     public void printReorder() {
         System.out.println(REORDER_MESSAGE);
+    }
+
+    public void printMemberShipMessage() {
+        System.out.println(MEMBERSHIP_MESSAGE);
     }
 }
