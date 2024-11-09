@@ -12,7 +12,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import store.constant.ProductFileConstant;
 import store.constant.PromotionFileConstant;
 import store.exception.ErrorCode;
@@ -30,11 +33,41 @@ public class InitConvenienceStoreController {
         try (BufferedReader reader = makeBufferedReader(ProductFileConstant.PRODUCT_FILE)) {
             List<String> productData = reader.lines().skip(1).toList();
             productRepository.saveAll(mapToProduct(productData));
+            productRepository.saveAll(addNormalProduct());
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_NOT_FOUND_ERROR.getMessage());
         }
+    }
+
+    private List<Product> addNormalProduct() {
+        List<Product> products = productRepository.findAll();
+        Map<String, List<Product>> groupedByName = groupByName(products);
+        return generalProduct(groupedByName);
+    }
+
+    private List<Product> generalProduct(Map<String, List<Product>> groupedByName) {
+        List<Product> generalProduct = new ArrayList<>();
+        for (Map.Entry<String, List<Product>> entry : groupedByName.entrySet()) {
+            List<Product> productList = entry.getValue();
+            if (hasNullPromotion(productList)) {
+                continue;
+            }
+            Product product = productList.get(0);
+            generalProduct.add(new Product(product.getName(), product.getPrice()));
+        }
+        return generalProduct;
+    }
+
+    private boolean hasNullPromotion(List<Product> productList) {
+        return productList.stream()
+                .anyMatch(product -> null == product.getPromotion());
+    }
+
+    private Map<String, List<Product>> groupByName(List<Product> products) {
+        return products.stream()
+                .collect(Collectors.groupingBy(Product::getName));
     }
 
     private List<Product> mapToProduct(List<String> products) {
