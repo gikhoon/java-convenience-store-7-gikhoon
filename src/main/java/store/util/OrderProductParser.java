@@ -14,8 +14,8 @@ public class OrderProductParser {
             throw new IllegalArgumentException(ErrorCode.ORDER_PRODUCT_FORMAT_ERROR.getMessage());
         }
 
-        return Arrays.stream(orders.trim()
-                        .split(PRODUCT_SPLIT_SEPARATOR))
+        return Arrays.stream(orders.split(PRODUCT_SPLIT_SEPARATOR))
+                .map(String::trim)
                 .toList();
     }
 
