@@ -13,6 +13,7 @@ import store.controller.dto.ReceiptProductInfo;
 import store.exception.ErrorCode;
 import store.model.entity.Product;
 import store.model.repository.ProductRepository;
+import store.validation.OrderProductValidator;
 
 public class ProductService {
     private final ProductRepository productRepository = new ProductRepository();
@@ -20,15 +21,6 @@ public class ProductService {
     public ProductInfoDto getAllProductInfos() {
         List<Product> products = productRepository.findAll();
         return ProductInfoDto.toDto(products);
-    }
-
-    private void validateSufficientProductQuantity(List<Product> activeProduct, Integer quantity) {
-        int totalQuantity = activeProduct.stream()
-                .mapToInt(Product::getQuantity)
-                .sum();
-        if (quantity > totalQuantity) {
-            throw new IllegalArgumentException(ErrorCode.NOT_SUFFICIENT_QUANTITY.getMessage());
-        }
     }
 
     private List<Product> findActiveProduct(String productName) {
@@ -86,7 +78,7 @@ public class ProductService {
 
     public void checkSufficientQuantity(String name, Integer quantity) {
         List<Product> activeProduct = findActiveProduct(name);
-        validateSufficientProductQuantity(activeProduct, quantity);
+        OrderProductValidator.validateSufficientProductQuantity(activeProduct, quantity);
     }
 
     public int countExtraProduct(String productName, Integer quantity) {
