@@ -55,7 +55,8 @@ public class ProductOrderController {
         addPromotionalOrderInfo(orderNameInfo, remainingPromotionQuantity, productOrderInfos);
     }
 
-    private void addNonPromotionalOrderInfo(OrderNameInfo orderNameInfo, int remainingPromotionQuantity, List<ProductOrderInfo> productOrderInfos) {
+    private void addNonPromotionalOrderInfo(OrderNameInfo orderNameInfo, int remainingPromotionQuantity,
+                                            List<ProductOrderInfo> productOrderInfos) {
         if (remainingPromotionQuantity > 0) {
             ProductOrderInfo orderInfo = productService.makeProductOrderInfo(
                     orderNameInfo.getProductName(), remainingPromotionQuantity, false
@@ -64,7 +65,8 @@ public class ProductOrderController {
         }
     }
 
-    private void addPromotionalOrderInfo(OrderNameInfo orderNameInfo, int remainingPromotionQuantity, List<ProductOrderInfo> productOrderInfos) {
+    private void addPromotionalOrderInfo(OrderNameInfo orderNameInfo, int remainingPromotionQuantity,
+                                         List<ProductOrderInfo> productOrderInfos) {
         int promotionalQuantity = orderNameInfo.getQuantity() - remainingPromotionQuantity;
         if (promotionalQuantity > 0) {
             ProductOrderInfo orderInfo = productService.makeProductOrderInfo(
@@ -85,9 +87,17 @@ public class ProductOrderController {
     private int remainProduct(OrderNameInfo orderNameInfo) {
         int remainProduct = productService.countRemainProduct(orderNameInfo.getProductName(),
                 orderNameInfo.getQuantity());
+        return deleteRemainProductIfPresent(orderNameInfo, remainProduct);
+    }
+
+    private int deleteRemainProductIfPresent(OrderNameInfo orderNameInfo, int remainProduct) {
         if (remainProduct > 0) {
             outputView.printRemainProduct(orderNameInfo.getProductName(), remainProduct);
-            deleteRemainProduct(getYesOrNo(), remainProduct, orderNameInfo);
+            boolean status = getYesOrNo();
+            if (!status) {
+                deleteRemainProduct(status, remainProduct, orderNameInfo);
+                return 0;
+            }
         }
         return remainProduct;
     }
