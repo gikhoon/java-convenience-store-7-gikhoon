@@ -126,14 +126,19 @@ public class ProductService {
 
     private OrderProduct calculateOrderSum(Map<String, List<ProductOrderInfo>> groupByProductName) {
         List<ProductInfo> productInfos = groupByProductName.entrySet().stream()
-                .map(entry -> {
-                    List<ProductOrderInfo> productOrderInfos = entry.getValue();
-                    int totalQuantity = calculateTotalQuantity(productOrderInfos);
-                    int totalPrice = calculateTotalPrice(productOrderInfos);
-                    return new ProductInfo(entry.getKey(), totalQuantity, totalPrice);
-                })
+                .map(this::createProductInfo)
                 .toList();
         return new OrderProduct(productInfos);
+    }
+
+    private OrderProduct.ProductInfo createProductInfo(Map.Entry<String, List<ProductOrderInfo>> entry) {
+        String productName = entry.getKey();
+        List<ProductOrderInfo> productOrderInfos = entry.getValue();
+
+        int totalQuantity = calculateTotalQuantity(productOrderInfos);
+        int totalPrice = calculateTotalPrice(productOrderInfos);
+
+        return new OrderProduct.ProductInfo(productName, totalQuantity, totalPrice);
     }
 
     private int calculateTotalQuantity(List<ProductOrderInfo> orderInfos) {
