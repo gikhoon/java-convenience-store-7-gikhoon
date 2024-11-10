@@ -13,4 +13,12 @@ public class ProductOrderInfoFixture {
         return orderInfos;
     }
 
+    public static List<ProductOrderInfo> productOrderInfoList2() {
+        List<ProductOrderInfo> orderInfos = new ArrayList<>();
+        orderInfos.add(new ProductOrderInfo(ProductFixture.promotionProduct, 3, true));
+        orderInfos.add(new ProductOrderInfo(ProductFixture.promotionProduct, 4, false));
+        orderInfos.add(new ProductOrderInfo(ProductFixture.noPromotionProduct, 1000, false));
+        return orderInfos;
+    }
+
 }
