@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import store.controller.dto.ProductOrderInfo;
 import store.controller.dto.PromotionProductInfo;
@@ -15,6 +16,7 @@ class ReceiptServiceTest {
     private final ReceiptService receiptService = new ReceiptService();
 
     @Test
+    @DisplayName("영수증 프로모션 정보를 가져올 수 있다")
     void 영수증_프로모션_정보를_가져올_수_있다() {
         //given
         List<ProductOrderInfo> orderInfos = new ArrayList<>();
@@ -36,6 +38,7 @@ class ReceiptServiceTest {
     }
 
     @Test
+    @DisplayName("영수증 상품 정보를 가져올 수 있다")
     void 영수증_상품_정보를_가져올_수_있다() {
         //given
         List<ProductOrderInfo> orderInfos = ProductOrderInfoFixture.productOrderInfoList();
