@@ -36,15 +36,20 @@ public class ProductService {
     public void buyProduct(List<OrderNameInfo> infos) {
         for (OrderNameInfo info : infos) {
             List<Product> products = findActiveProduct(info.getProductName());
-            Product promotionProduct = filterPromoteProduction(products);
-            int remainingQuantity = info.getQuantity();
-            if (promotionProduct != null) {
-                remainingQuantity = deductFromPromotionProduct(promotionProduct, remainingQuantity);
-            }
+            int remainingQuantity = handlePromotionProduct(products, info.getQuantity());
             if (remainingQuantity > 0) {
-                filterGeneralProduction(products).buy(remainingQuantity);
+                handleGeneralProduct(products, remainingQuantity);
             }
         }
+    }
+
+    private int handlePromotionProduct(List<Product> products, int quantity) {
+        Product promotionProduct = filterPromoteProduction(products);
+        return promotionProduct != null ? deductFromPromotionProduct(promotionProduct, quantity) : quantity;
+    }
+
+    private void handleGeneralProduct(List<Product> products, int remainingQuantity) {
+        filterGeneralProduction(products).buy(remainingQuantity);
     }
 
     private int deductFromPromotionProduct(Product promotionProduct, int quantity) {
