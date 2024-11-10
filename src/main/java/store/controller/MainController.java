@@ -33,8 +33,18 @@ public class MainController {
             int membershipDiscount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
             ReceiptDto receipt = receiptController.generateReceipt(buyProducts, membershipDiscount);
             outputView.printReceipt(receipt);
-            outputView.printReorder();
-        } while (YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo()));
+        } while (reorder());
+    }
+
+    private boolean reorder() {
+        while (true) {
+            try {
+                outputView.printReorder();
+                return YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo());
+            } catch (IllegalArgumentException e) {
+                outputView.printErrorMessage(e.getMessage());
+            }
+        }
     }
 
     private void printProductInfo() {

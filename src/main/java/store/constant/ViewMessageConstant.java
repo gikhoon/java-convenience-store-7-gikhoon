@@ -6,7 +6,7 @@ public class ViewMessageConstant {
     public static String REORDER_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
     public static String MEMBERSHIP_MESSAGE = "멤버십 할인을 받으시겠습니까? (Y/N)";
     public static String RECEIPT_INTRO_MESSAGE = "==============W 편의점================";
-    public static String RECEIPT_PRODUCT_ORDER_MESSAGE = "상품명\t\t수량\t금액";
+    public static String RECEIPT_PRODUCT_ORDER_MESSAGE = "상품명\t\t\t수량\t\t금액";
     public static String RECEIPT_PROMOTION_INTRO_MESSAGE = "=============증\t정===============";
     public static String RECEIPT_RESULT_INTRO_MESSAGE = "====================================";
 }

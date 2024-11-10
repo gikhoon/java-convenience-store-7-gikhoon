@@ -1,5 +1,7 @@
 package store.controller.dto;
 
+import static store.constant.FormatConstant.RECEIPT_PROMOTION_FORMAT;
+
 public record PromotionProductInfo(
         String name,
         Integer quantity,
@@ -12,5 +14,11 @@ public record PromotionProductInfo(
                 freeProductAmount,
                 orderInfo.calculatePromotionDiscountAmount(freeProductAmount)
         );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(RECEIPT_PROMOTION_FORMAT,
+                name, quantity);
     }
 }
