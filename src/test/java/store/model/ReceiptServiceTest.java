@@ -9,6 +9,7 @@ import store.controller.dto.ProductOrderInfo;
 import store.controller.dto.PromotionProductInfo;
 import store.controller.dto.ReceiptProductInfo;
 import store.fixture.ProductFixture;
+import store.fixture.ProductOrderInfoFixture;
 
 class ReceiptServiceTest {
     private final ReceiptService receiptService = new ReceiptService();
@@ -37,27 +38,21 @@ class ReceiptServiceTest {
     @Test
     void 영수증_상품_정보를_가져올_수_있다() {
         //given
-        int product1Quantity1 = 4;
-        int product1Quantity2 = 3;
-        int product2Quantity1 = 3;
-        List<ProductOrderInfo> orderInfos = new ArrayList<>();
-        orderInfos.add(new ProductOrderInfo(ProductFixture.promotionProduct, product1Quantity1, true));
-        orderInfos.add(new ProductOrderInfo(ProductFixture.promotionProduct, product1Quantity2, false));
-        orderInfos.add(new ProductOrderInfo(ProductFixture.noPromotionProduct, product2Quantity1, false));
+        List<ProductOrderInfo> orderInfos = ProductOrderInfoFixture.productOrderInfoList();
+        int product1TotalQuantity = 7;
+        int product2TotalQuantity = 3;
 
         //when
         List<ReceiptProductInfo> products = receiptService.generateOrderProductForReceipt(orderInfos)
                 .products();
 
         //then
-        int product1TotalQuantity = product1Quantity1 + product2Quantity1;
-
         ReceiptProductInfo product1ReceiptInfo = new ReceiptProductInfo(ProductFixture.promotionProduct.getName(),
                 product1TotalQuantity,
                 ProductFixture.promotionProduct.getPrice() * product1TotalQuantity);
         ReceiptProductInfo product2ReceiptInfo = new ReceiptProductInfo(ProductFixture.noPromotionProduct.getName(),
-                product2Quantity1,
-                ProductFixture.noPromotionProduct.getPrice() * product2Quantity1);
+                product2TotalQuantity,
+                ProductFixture.noPromotionProduct.getPrice() * product2TotalQuantity);
 
         assertThat(products).hasSize(2);
         assertThat(products).containsExactlyInAnyOrder(product1ReceiptInfo, product2ReceiptInfo);
