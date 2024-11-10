@@ -30,7 +30,7 @@ public class ProductOrderController {
 
     private ProductOrderList processOrder(List<String> orders) {
         List<OrderNameInfo> orderNameInfos = orders.stream()
-                .map(productService::mapToProductOrderInfo)
+                .map(OrderNameInfo::mapToProductOrderInfo)
                 .toList();
 
         List<ProductOrderInfo> productOrderInfo = orderProductInfo(orderNameInfos);
