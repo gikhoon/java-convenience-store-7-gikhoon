@@ -170,8 +170,4 @@ public class ProductService {
                 .toList();
         return new PromotionProduct(promotionProductInfos);
     }
-
-    public MembershipDiscount generatePriceData(List<ProductOrderInfo> buyProducts, int membershipDiscount) {
-        return null;
-    }
 }

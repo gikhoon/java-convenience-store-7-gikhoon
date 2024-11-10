@@ -6,10 +6,11 @@ public record PromotionProductInfo(
         Integer price
 ) {
     public static PromotionProductInfo from(ProductOrderInfo orderInfo) {
+        int freeProductAmount = orderInfo.getGetAmount();
         return new PromotionProductInfo(
                 orderInfo.getProductName(),
-                orderInfo.getGetAmount(),
-                orderInfo.calculateTotalPrice()
+                freeProductAmount,
+                orderInfo.calculatePromotionDiscountAmount(freeProductAmount)
         );
     }
 }

@@ -3,10 +3,13 @@ package store.view;
 import static store.constant.FormatConstant.EXTRA_ORDER_FORMAT;
 import static store.constant.FormatConstant.REMAIN_ORDER_FORMAT;
 import static store.constant.ViewMessageConstant.MEMBERSHIP_MESSAGE;
+import static store.constant.ViewMessageConstant.RECEIPT_INTRO_MESSAGE;
+import static store.constant.ViewMessageConstant.RECEIPT_PRODUCT_ORDER_MESSAGE;
 import static store.constant.ViewMessageConstant.REORDER_MESSAGE;
 import static store.constant.ViewMessageConstant.WELCOME_MESSAGE;
 
 import store.controller.dto.ProductInfoDto;
+import store.controller.dto.ReceiptDto;
 
 public class OutputView {
     private static final String ERROR_PREFIX = "[ERROR] ";
@@ -41,5 +44,13 @@ public class OutputView {
 
     public void printMemberShipMessage() {
         System.out.println(MEMBERSHIP_MESSAGE);
+    }
+
+    public void printReceipt(ReceiptDto receipt) {
+        System.out.println(RECEIPT_INTRO_MESSAGE);
+        System.out.println(RECEIPT_PRODUCT_ORDER_MESSAGE);
+        receipt.orderProduct()
+                .products()
+                .forEach(System.out::println);
     }
 }

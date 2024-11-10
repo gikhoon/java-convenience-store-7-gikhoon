@@ -41,4 +41,8 @@ public class ProductOrderInfo {
     public boolean isPromote() {
         return isPromote;
     }
+
+    public int calculatePromotionDiscountAmount(int freeProductAmount) {
+        return product.getPrice() * freeProductAmount;
+    }
 }

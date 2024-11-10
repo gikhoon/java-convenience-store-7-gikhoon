@@ -32,6 +32,7 @@ public class MainController {
             ProductOrderList buyProducts = productOrderController.orderProduct();
             int membershipDiscount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
             ReceiptDto receipt = receiptController.generateReceipt(buyProducts, membershipDiscount);
+            outputView.printReceipt(receipt);
             outputView.printReorder();
         } while (YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo()));
     }
