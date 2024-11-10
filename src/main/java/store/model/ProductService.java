@@ -9,6 +9,8 @@ import store.controller.dto.OrderProduct;
 import store.controller.dto.OrderProduct.ProductInfo;
 import store.controller.dto.ProductInfoDto;
 import store.controller.dto.ProductOrderInfo;
+import store.controller.dto.PromotionProduct;
+import store.controller.dto.PromotionProductInfo;
 import store.exception.ErrorCode;
 import store.model.entity.Product;
 import store.model.repository.ProductRepository;
@@ -158,5 +160,13 @@ public class ProductService {
                 .collect(Collectors.groupingBy(info ->
                         info.getProduct().getName())
                 );
+    }
+
+    public PromotionProduct generatePromotionProductForReceipt(List<ProductOrderInfo> productOrderList) {
+        List<PromotionProductInfo> promotionProductInfos = productOrderList.stream()
+                .filter(ProductOrderInfo::isPromote)
+                .map(PromotionProductInfo::from)
+                .toList();
+        return new PromotionProduct(promotionProductInfos);
     }
 }

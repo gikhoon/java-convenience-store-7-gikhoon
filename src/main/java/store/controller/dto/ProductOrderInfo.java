@@ -13,6 +13,19 @@ public class ProductOrderInfo {
         this.isPromote = isPromote;
     }
 
+    public int getGetAmount() {
+        if (!isPromote) {
+            return 0;
+        }
+        int promotionBuy = product.getPromotionBuy();
+        int promotionGet = product.getPromotionGet();
+        return (quantity / (promotionBuy + promotionGet)) * promotionGet;
+    }
+
+    public String getProductName() {
+        return product.getName();
+    }
+
     public int calculateTotalPrice() {
         return product.getPrice() * quantity;
     }

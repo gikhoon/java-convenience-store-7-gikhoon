@@ -51,6 +51,20 @@ public class Product {
         return "";
     }
 
+    public int getPromotionBuy() {
+        if (promotion == null) {
+            return 0;
+        }
+        return promotion.getBuy();
+    }
+
+    public int getPromotionGet() {
+        if (promotion == null) {
+            return 0;
+        }
+        return promotion.getGet();
+    }
+
     public boolean isPromote() {
         return promotion != null && promotion.isPromote();
     }
