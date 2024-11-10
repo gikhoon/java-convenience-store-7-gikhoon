@@ -6,11 +6,12 @@ import java.util.stream.Collectors;
 import store.constant.OrderProductConstant;
 import store.controller.dto.OrderNameInfo;
 import store.controller.dto.OrderProduct;
-import store.controller.dto.OrderProduct.ProductInfo;
+import store.controller.dto.MembershipDiscount;
 import store.controller.dto.ProductInfoDto;
 import store.controller.dto.ProductOrderInfo;
 import store.controller.dto.PromotionProduct;
 import store.controller.dto.PromotionProductInfo;
+import store.controller.dto.ReceiptProductInfo;
 import store.exception.ErrorCode;
 import store.model.entity.Product;
 import store.model.repository.ProductRepository;
@@ -127,20 +128,20 @@ public class ProductService {
     }
 
     private OrderProduct calculateOrderSum(Map<String, List<ProductOrderInfo>> groupByProductName) {
-        List<ProductInfo> productInfos = groupByProductName.entrySet().stream()
+        List<ReceiptProductInfo> productInfos = groupByProductName.entrySet().stream()
                 .map(this::createProductInfo)
                 .toList();
         return new OrderProduct(productInfos);
     }
 
-    private OrderProduct.ProductInfo createProductInfo(Map.Entry<String, List<ProductOrderInfo>> entry) {
+    private ReceiptProductInfo createProductInfo(Map.Entry<String, List<ProductOrderInfo>> entry) {
         String productName = entry.getKey();
         List<ProductOrderInfo> productOrderInfos = entry.getValue();
 
         int totalQuantity = calculateTotalQuantity(productOrderInfos);
         int totalPrice = calculateTotalPrice(productOrderInfos);
 
-        return new OrderProduct.ProductInfo(productName, totalQuantity, totalPrice);
+        return new ReceiptProductInfo(productName, totalQuantity, totalPrice);
     }
 
     private int calculateTotalQuantity(List<ProductOrderInfo> orderInfos) {
@@ -168,5 +169,9 @@ public class ProductService {
                 .map(PromotionProductInfo::from)
                 .toList();
         return new PromotionProduct(promotionProductInfos);
+    }
+
+    public MembershipDiscount generatePriceData(List<ProductOrderInfo> buyProducts, int membershipDiscount) {
+        return null;
     }
 }
