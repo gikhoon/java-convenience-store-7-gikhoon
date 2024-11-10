@@ -3,8 +3,8 @@ package store.util;
 import store.exception.ErrorCode;
 
 public class YesOrNoParser {
-    private static String YES = "Y";
-    private static String NO = "N";
+    private static final String YES = "Y";
+    private static final String NO = "N";
 
     public static boolean parseYesOrNo(String yesOrNo) {
         if (yesOrNo.equals(YES)) {
