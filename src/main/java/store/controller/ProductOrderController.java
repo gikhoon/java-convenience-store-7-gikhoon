@@ -14,6 +14,7 @@ import store.view.OutputView;
 
 public class ProductOrderController {
     private final ProductService productService = new ProductService();
+    private final OrderProductValidator orderProductValidator = new OrderProductValidator();
     private final OutputView outputView = new OutputView();
     private final InputView inputView = new InputView();
 
@@ -145,7 +146,7 @@ public class ProductOrderController {
 
     private void validateOrders(List<String> orders) {
         for (String order : orders) {
-            OrderProductValidator.validateProductOrderFormat(order.trim());
+            orderProductValidator.validateProductOrderFormat(order.trim());
         }
     }
 }

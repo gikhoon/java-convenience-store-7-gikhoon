@@ -11,6 +11,7 @@ import store.validation.OrderProductValidator;
 
 public class ProductService {
     private final ProductRepository productRepository = new ProductRepository();
+    private final OrderProductValidator orderProductValidator = new OrderProductValidator();
 
     public ProductInfoDto getAllProductInfos() {
         List<Product> products = productRepository.findAll();
@@ -77,7 +78,7 @@ public class ProductService {
 
     public void checkSufficientQuantity(String name, Integer quantity) {
         List<Product> activeProduct = findActiveProduct(name);
-        OrderProductValidator.validateSufficientProductQuantity(activeProduct, quantity);
+        orderProductValidator.validateSufficientProductQuantity(activeProduct, quantity);
     }
 
     public int countExtraProduct(String productName, Integer quantity) {
