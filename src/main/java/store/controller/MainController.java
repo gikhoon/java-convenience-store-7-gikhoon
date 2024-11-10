@@ -1,6 +1,7 @@
 package store.controller;
 
 import store.controller.dto.ProductOrderList;
+import store.controller.dto.ReceiptDto;
 import store.model.ProductService;
 import store.util.YesOrNoParser;
 import store.view.InputView;
@@ -10,6 +11,7 @@ public class MainController {
     private final InitConvenienceStoreController initController = new InitConvenienceStoreController();
     private final ProductOrderController productOrderController = new ProductOrderController();
     private final MembershipController membershipController;
+    private final ReceiptController receiptController = new ReceiptController();
     private final ProductService productService = new ProductService();
     private final InputView inputView = new InputView();
     private final OutputView outputView = new OutputView();
@@ -28,7 +30,8 @@ public class MainController {
         do {
             printProductInfo();
             ProductOrderList buyProducts = productOrderController.orderProduct();
-            int discount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
+            int membershipDiscount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
+            ReceiptDto receipt = receiptController.generateReceipt(buyProducts, membershipDiscount);
             outputView.printReorder();
         } while (YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo()));
     }

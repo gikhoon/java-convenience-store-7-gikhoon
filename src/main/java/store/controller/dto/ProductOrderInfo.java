@@ -13,6 +13,10 @@ public class ProductOrderInfo {
         this.isPromote = isPromote;
     }
 
+    public int calculateTotalPrice() {
+        return product.getPrice() * quantity;
+    }
+
     public Product getProduct() {
         return product;
     }

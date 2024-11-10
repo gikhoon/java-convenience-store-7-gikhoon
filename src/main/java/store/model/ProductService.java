@@ -1,8 +1,12 @@
 package store.model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import store.constant.OrderProductConstant;
 import store.controller.dto.OrderNameInfo;
+import store.controller.dto.OrderProduct;
+import store.controller.dto.OrderProduct.ProductInfo;
 import store.controller.dto.ProductInfoDto;
 import store.controller.dto.ProductOrderInfo;
 import store.exception.ErrorCode;
@@ -113,5 +117,41 @@ public class ProductService {
     public ProductOrderInfo makeProductOrderInfo(String productName, int quantity, boolean isPromote) {
         Product product = productRepository.findByNameAndIsPromote(productName, isPromote);
         return new ProductOrderInfo(product, quantity, isPromote);
+    }
+
+    public OrderProduct generateOrderProductForReceipt(List<ProductOrderInfo> buyProducts) {
+        Map<String, List<ProductOrderInfo>> groupByProductName = groupByProductName(buyProducts);
+        return calculateOrderSum(groupByProductName);
+    }
+
+    private OrderProduct calculateOrderSum(Map<String, List<ProductOrderInfo>> groupByProductName) {
+        List<ProductInfo> productInfos = groupByProductName.entrySet().stream()
+                .map(entry -> {
+                    List<ProductOrderInfo> productOrderInfos = entry.getValue();
+                    int totalQuantity = calculateTotalQuantity(productOrderInfos);
+                    int totalPrice = calculateTotalPrice(productOrderInfos);
+                    return new ProductInfo(entry.getKey(), totalQuantity, totalPrice);
+                })
+                .toList();
+        return new OrderProduct(productInfos);
+    }
+
+    private int calculateTotalQuantity(List<ProductOrderInfo> orderInfos) {
+        return orderInfos.stream()
+                .mapToInt(ProductOrderInfo::getQuantity)
+                .sum();
+    }
+
+    private int calculateTotalPrice(List<ProductOrderInfo> orderInfos) {
+        return orderInfos.stream()
+                .mapToInt(ProductOrderInfo::calculateTotalPrice)
+                .sum();
+    }
+
+    private Map<String, List<ProductOrderInfo>> groupByProductName(List<ProductOrderInfo> productOrderList) {
+        return productOrderList.stream()
+                .collect(Collectors.groupingBy(info ->
+                        info.getProduct().getName())
+                );
     }
 }
