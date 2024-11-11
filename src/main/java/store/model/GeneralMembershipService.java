@@ -11,14 +11,22 @@ public class GeneralMembershipService implements MembershipService {
 
     @Override
     public int calculateDisCount(List<ProductOrderInfo> productOrderList) {
+        int totalCost = calculateTotalCost(productOrderList);
+        return applyDiscount(totalCost);
+    }
+
+    private int calculateTotalCost(List<ProductOrderInfo> productOrderList) {
         int totalCost = 0;
         Map<String, List<ProductOrderInfo>> productMap = groupByProductName(productOrderList);
         for (List<ProductOrderInfo> productInfos : productMap.values()) {
-            if (hasPromotionProduct(productInfos)) {
-                continue;
+            if (!hasPromotionProduct(productInfos)) {
+                totalCost += calculateCost(productInfos);
             }
-            totalCost += calculateCost(productInfos);
         }
+        return totalCost;
+    }
+
+    private int applyDiscount(int totalCost) {
         return Math.min((int) Math.round(totalCost * DISCOUNT_RATE), MAX_DISCOUNT);
     }
 
