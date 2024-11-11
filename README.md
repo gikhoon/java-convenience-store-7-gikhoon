@@ -1,6 +1,111 @@
 # 편의점
 
 ## 소개
+편의점에는 현재 재고와 프로모션 할인 상황을 고려하여 최종 걸제 금액을 계산하고
+출력하는 프로그램입니다. 사용자는 상품의 가격과 수량을 입력하여 최종 결제 금액을 산출받으며,
+자동으로 프로모션 할인과 멤버십 할인 정책이 적용됩니다.
+
+프로모션 할인 적용: 지정된 상품에는 프로모션 기간 내 N+1 형태의 할인이 적용되며,
+조건에 맞는 상품은 자동으로 증정됩니다. 재고가 부족한 경우에는 고객에게 적절한 안내를 제공합니다.
+
+멤버십 할인: 프로모션이 적용되지 않은 제품에 대해 멤버십 할인을 추가로 적용하며,
+최대 8,000원 한도 내에서 할인됩니다.
+
+이를 기반으로 구매 상품 내역, 할인 내역, 최종 결제 금액을 포함하는 영수중을
+출력합니다.
+
+## 디렉토리 구조
+```text
++---main
+|   +---java
+|   |   \---store
+|   |       |   Application.java
+|   |       |
+|   |       +---constant
+|   |       |       FormatConstant.java
+|   |       |       OrderProductConstant.java
+|   |       |       ProductFileConstant.java
+|   |       |       PromotionFileConstant.java
+|   |       |       ViewMessageConstant.java
+|   |       |
+|   |       +---controller
+|   |       |   |   InitConvenienceStoreController.java
+|   |       |   |   MainController.java
+|   |       |   |   MembershipController.java
+|   |       |   |   ProductOrderController.java
+|   |       |   |   ReceiptController.java
+|   |       |   |
+|   |       |   \---dto
+|   |       |           MembershipDiscount.java
+|   |       |           OrderNameInfo.java
+|   |       |           OrderProduct.java
+|   |       |           ProductInfo.java
+|   |       |           ProductInfoDto.java
+|   |       |           ProductOrderInfo.java
+|   |       |           ProductOrderList.java
+|   |       |           PromotionProduct.java
+|   |       |           PromotionProductInfo.java
+|   |       |           ReceiptDto.java
+|   |       |           ReceiptProductInfo.java
+|   |       |
+|   |       +---exception
+|   |       |       ErrorCode.java
+|   |       |
+|   |       +---model
+|   |       |   |   GeneralMembershipService.java
+|   |       |   |   MembershipService.java
+|   |       |   |   ProductService.java
+|   |       |   |   ReceiptService.java
+|   |       |   |
+|   |       |   +---entity
+|   |       |   |       Product.java
+|   |       |   |       ProductPrice.java
+|   |       |   |       ProductQuantity.java
+|   |       |   |       Promotion.java
+|   |       |   |
+|   |       |   \---repository
+|   |       |           ProductRepository.java
+|   |       |           PromotionRepository.java
+|   |       |
+|   |       +---util
+|   |       |       ConvenienceStoreInitParser.java
+|   |       |       OrderProductParser.java
+|   |       |       YesOrNoParser.java
+|   |       |
+|   |       +---validation
+|   |       |       OrderProductValidator.java
+|   |       |
+|   |       \---view
+|   |               InputView.java
+|   |               OutputView.java
+|   |
+|   \---resources
+|           products.md
+|           promotions.md
+|
+\---test
+    \---java
+        \---store
+            |   ApplicationTest.java
+            |
+            +---fixture
+            |       ProductFixture.java
+            |       ProductOrderInfoFixture.java
+            |       PromotionFixture.java
+            |
+            +---model
+            |       GeneralMembershipServiceTest.java
+            |       ProductServiceTest.java
+            |       ReceiptServiceTest.java
+            |
+            +---util
+            |       OrderProductParserTest.java
+            |       YesOrNoParserTest.java
+            |
+            \---validation
+                    OrderProductValidatorTest.java
+
+```
 
 ## 기능 명세
 
