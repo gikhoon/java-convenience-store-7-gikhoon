@@ -34,7 +34,7 @@ public class InitConvenienceStoreController {
             return;
         }
         try (BufferedReader reader = makeBufferedReader(ProductFileConstant.PRODUCT_FILE)) {
-            saveProducts(reader);
+            saveProductsInRepository(reader);
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
@@ -42,34 +42,38 @@ public class InitConvenienceStoreController {
         }
     }
 
-    private void saveProducts(BufferedReader reader) {
+    private void saveProductsInRepository(BufferedReader reader) {
         List<String> productData = reader.lines()
                 .skip(1)
                 .toList();
-        productRepository.saveAll(mapToProduct(productData));
+        productRepository.saveAll(mapToProducts(productData));
         productRepository.saveAll(addNormalProduct());
     }
 
     private List<Product> addNormalProduct() {
         List<Product> products = productRepository.findAll();
         Map<String, List<Product>> groupedByName = groupByName(products);
-        return generalProduct(groupedByName);
+        return generateNonPromotionProducts(groupedByName);
     }
 
-    private List<Product> generalProduct(Map<String, List<Product>> groupedByName) {
+    private List<Product> generateNonPromotionProducts(Map<String, List<Product>> groupedByName) {
         List<Product> generalProduct = new ArrayList<>();
         for (Map.Entry<String, List<Product>> entry : groupedByName.entrySet()) {
             List<Product> productList = entry.getValue();
-            if (hasNullPromotion(productList)) {
-                continue;
+            if (!hasNonPromotionProduct(productList)) {
+                Product product = productList.get(0); //일반 상품이 없으면 프로모션만 있는거기 때문에 일반 상품을 만들어준다.
+                generalProduct.add(createGeneralProduct(product));
             }
-            Product product = productList.get(0);
-            generalProduct.add(new Product(product.getName(), product.getPrice()));
         }
         return generalProduct;
     }
 
-    private boolean hasNullPromotion(List<Product> productList) {
+    private Product createGeneralProduct(Product product) {
+        return new Product(product.getName(),
+                product.getPrice());
+    }
+
+    private boolean hasNonPromotionProduct(List<Product> productList) {
         return productList.stream()
                 .anyMatch(product -> null == product.getPromotion());
     }
@@ -79,7 +83,7 @@ public class InitConvenienceStoreController {
                 .collect(Collectors.groupingBy(Product::getName));
     }
 
-    private List<Product> mapToProduct(List<String> products) {
+    private List<Product> mapToProducts(List<String> products) {
         return products.stream()
                 .map(ConvenienceStoreInitParser::parseData)
                 .map(this::createProduct)
@@ -104,7 +108,7 @@ public class InitConvenienceStoreController {
     }
 
     public void initPromotions() {
-        if (promotionRepository.isDataExist()){
+        if (promotionRepository.isDataExist()) {
             return;
         }
         try (BufferedReader reader = makeBufferedReader(PromotionFileConstant.PROMOTION_FILE)) {
