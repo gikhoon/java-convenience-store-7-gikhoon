@@ -40,7 +40,10 @@ public class ProductService {
 
     private int handlePromotionProduct(List<Product> products, int quantity) {
         Product promotionProduct = filterPromoteProduction(products);
-        return promotionProduct != null ? deductFromPromotionProduct(promotionProduct, quantity) : quantity;
+        if (promotionProduct != null) {
+            return deductFromPromotionProduct(promotionProduct, quantity);
+        }
+        return quantity;
     }
 
     private void handleGeneralProduct(List<Product> products, int remainingQuantity) {
