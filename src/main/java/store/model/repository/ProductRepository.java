@@ -33,4 +33,8 @@ public class ProductRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean isDataExist() {
+        return !products.isEmpty();
+    }
 }

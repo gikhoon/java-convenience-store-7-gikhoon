@@ -17,4 +17,8 @@ public class PromotionRepository {
                 .filter(promotion -> promotion.isEqualName(name))
                 .findFirst();
     }
+
+    public boolean isDataExist() {
+        return !promotions.isEmpty();
+    }
 }

@@ -30,15 +30,24 @@ public class InitConvenienceStoreController {
     private final ProductRepository productRepository = new ProductRepository();
 
     public void initProducts() {
+        if (productRepository.isDataExist()) {
+            return;
+        }
         try (BufferedReader reader = makeBufferedReader(ProductFileConstant.PRODUCT_FILE)) {
-            List<String> productData = reader.lines().skip(1).toList();
-            productRepository.saveAll(mapToProduct(productData));
-            productRepository.saveAll(addNormalProduct());
+            saveProducts(reader);
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_NOT_FOUND_ERROR.getMessage());
         }
+    }
+
+    private void saveProducts(BufferedReader reader) {
+        List<String> productData = reader.lines()
+                .skip(1)
+                .toList();
+        productRepository.saveAll(mapToProduct(productData));
+        productRepository.saveAll(addNormalProduct());
     }
 
     private List<Product> addNormalProduct() {
@@ -95,14 +104,23 @@ public class InitConvenienceStoreController {
     }
 
     public void initPromotions() {
+        if (promotionRepository.isDataExist()){
+            return;
+        }
         try (BufferedReader reader = makeBufferedReader(PromotionFileConstant.PROMOTION_FILE)) {
-            List<String> promotionData = reader.lines().skip(1).toList();
-            promotionRepository.saveAll(mapToPromotion(promotionData));
+            savePromotions(reader);
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_IO_ERROR.getMessage());
         } catch (NullPointerException e) {
             throw new IllegalArgumentException(ErrorCode.FILE_NOT_FOUND_ERROR.getMessage());
         }
+    }
+
+    private void savePromotions(BufferedReader reader) {
+        List<String> promotionData = reader.lines()
+                .skip(1)
+                .toList();
+        promotionRepository.saveAll(mapToPromotion(promotionData));
     }
 
     private List<Promotion> mapToPromotion(List<String> promotionData) {
