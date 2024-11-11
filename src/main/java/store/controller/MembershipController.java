@@ -19,8 +19,7 @@ public class MembershipController {
     public int calculateMembershipDisCount(List<ProductOrderInfo> productOrderList) {
         while (true) {
             try {
-                outputView.printMemberShipMessage();
-                if (YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo())) {
+                if (isMembershipApplicable()) {
                     return membershipService.calculateDisCount(productOrderList);
                 }
                 return 0;
@@ -28,5 +27,10 @@ public class MembershipController {
                 outputView.printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    private boolean isMembershipApplicable() {
+        outputView.printMemberShipMessage();
+        return YesOrNoParser.parseYesOrNo(inputView.inputYesOrNo());
     }
 }
