@@ -37,4 +37,8 @@ public class ProductRepository {
     public boolean isDataExist() {
         return !products.isEmpty();
     }
+
+    public void clearAll() {
+        products.clear();
+    }
 }

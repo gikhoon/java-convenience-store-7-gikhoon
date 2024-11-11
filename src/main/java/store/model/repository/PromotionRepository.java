@@ -21,4 +21,8 @@ public class PromotionRepository {
     public boolean isDataExist() {
         return !promotions.isEmpty();
     }
+
+    public void clearAll() {
+        promotions.clear();
+    }
 }

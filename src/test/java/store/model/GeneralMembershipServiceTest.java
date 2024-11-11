@@ -1,7 +1,6 @@
 package store.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,7 @@ class GeneralMembershipServiceTest {
         //given
         List<ProductOrderInfo> orderInfos = ProductOrderInfoFixture.productOrderInfoList();
         int noPromotionQuantity = 3;
-        int noPromotionPrice = ProductFixture.noPromotionProduct.getPrice() * noPromotionQuantity;
+        int noPromotionPrice = ProductFixture.noPromotionProductB.getPrice() * noPromotionQuantity;
 
         //when
         int disCount = service.calculateDisCount(orderInfos);
