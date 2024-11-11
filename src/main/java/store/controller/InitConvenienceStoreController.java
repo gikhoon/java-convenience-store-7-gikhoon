@@ -56,7 +56,7 @@ public class InitConvenienceStoreController {
 
     private List<Product> findPromotionOnlyProductsInRepository() {
         List<Product> products = productRepository.findAll();
-        Map<String, List<Product>> groupedByName = groupByName(products);
+        Map<String, List<Product>> groupedByName = groupProductByName(products);
         return findPromotionOnlyProducts(groupedByName);
     }
 
@@ -81,7 +81,7 @@ public class InitConvenienceStoreController {
                 .anyMatch(product -> null == product.getPromotion());
     }
 
-    private Map<String, List<Product>> groupByName(List<Product> products) {
+    private Map<String, List<Product>> groupProductByName(List<Product> products) {
         return products.stream()
                 .collect(Collectors.groupingBy(Product::getName));
     }
