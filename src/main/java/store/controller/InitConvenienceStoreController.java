@@ -47,25 +47,28 @@ public class InitConvenienceStoreController {
                 .skip(1)
                 .toList();
         productRepository.saveAll(mapToProducts(productData));
-        productRepository.saveAll(addNormalProduct());
+
+        List<Product> additionalGeneralProducts = findPromotionOnlyProductsInRepository().stream()
+                .map(this::createGeneralProduct)
+                .toList();
+        productRepository.saveAll(additionalGeneralProducts);
     }
 
-    private List<Product> addNormalProduct() {
+    private List<Product> findPromotionOnlyProductsInRepository() {
         List<Product> products = productRepository.findAll();
         Map<String, List<Product>> groupedByName = groupByName(products);
-        return generateNonPromotionProducts(groupedByName);
+        return findPromotionOnlyProducts(groupedByName);
     }
 
-    private List<Product> generateNonPromotionProducts(Map<String, List<Product>> groupedByName) {
-        List<Product> generalProduct = new ArrayList<>();
+    private List<Product> findPromotionOnlyProducts(Map<String, List<Product>> groupedByName) {
+        List<Product> productWithOnlyPromotion = new ArrayList<>();
         for (Map.Entry<String, List<Product>> entry : groupedByName.entrySet()) {
             List<Product> productList = entry.getValue();
             if (!hasNonPromotionProduct(productList)) {
-                Product product = productList.get(0); //일반 상품이 없으면 프로모션만 있는거기 때문에 일반 상품을 만들어준다.
-                generalProduct.add(createGeneralProduct(product));
+                productWithOnlyPromotion.add(productList.get(0));
             }
         }
-        return generalProduct;
+        return productWithOnlyPromotion;
     }
 
     private Product createGeneralProduct(Product product) {
