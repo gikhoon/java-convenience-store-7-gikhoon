@@ -49,11 +49,17 @@ public class ProductOrderController {
 
     private void processOrderForProduct(OrderNameInfo orderNameInfo, List<ProductOrderInfo> productOrderInfos) {
         checkOrderQuantity(orderNameInfo.getProductName(), orderNameInfo.getQuantity());
+        int remainingQuantity = orderNameInfo.getQuantity();
+        if (isPromotionProductExist(orderNameInfo.getProductName())) {
+            extraOrder(orderNameInfo);
+            remainingQuantity = remainProduct(orderNameInfo);
+        }
+        addOrderInfos(orderNameInfo, remainingQuantity, productOrderInfos);
+    }
 
-        int remainingPromotionQuantity = promotionProduct(orderNameInfo);
-
-        addNonPromotionalOrderInfo(orderNameInfo, remainingPromotionQuantity, productOrderInfos);
-        addPromotionalOrderInfo(orderNameInfo, remainingPromotionQuantity, productOrderInfos);
+    private void addOrderInfos(OrderNameInfo orderNameInfo, int remainingQuantity, List<ProductOrderInfo> productOrderInfos) {
+        addNonPromotionalOrderInfo(orderNameInfo, remainingQuantity, productOrderInfos);
+        addPromotionalOrderInfo(orderNameInfo, remainingQuantity, productOrderInfos);
     }
 
     private void addNonPromotionalOrderInfo(OrderNameInfo orderNameInfo, int remainingPromotionQuantity,
@@ -75,14 +81,6 @@ public class ProductOrderController {
             );
             productOrderInfos.add(orderInfo);
         }
-    }
-
-    private int promotionProduct(OrderNameInfo orderNameInfo) {
-        if (productService.isPromotionProductExist(orderNameInfo.getProductName())) {
-            extraOrder(orderNameInfo);
-            return remainProduct(orderNameInfo);
-        }
-        return orderNameInfo.getQuantity();
     }
 
     private int remainProduct(OrderNameInfo orderNameInfo) {
@@ -114,11 +112,11 @@ public class ProductOrderController {
                 orderNameInfo.getQuantity());
         if (extraProduct > 0) {
             outputView.printProductBuy(orderNameInfo.getProductName(), extraProduct);
-            addAdditionalProduct(getYesOrNo(), extraProduct, orderNameInfo);
+            addQuantityInOrderNameInfo(getYesOrNo(), extraProduct, orderNameInfo);
         }
     }
 
-    private void addAdditionalProduct(boolean status, int extraProduct, OrderNameInfo orderNameInfo) {
+    private void addQuantityInOrderNameInfo(boolean status, int extraProduct, OrderNameInfo orderNameInfo) {
         if (status) {
             orderNameInfo.addQuantity(extraProduct);
         }
@@ -148,5 +146,9 @@ public class ProductOrderController {
         for (String order : orders) {
             orderProductValidator.validateProductOrderFormat(order.trim());
         }
+    }
+
+    private boolean isPromotionProductExist(String productName) {
+        return productService.isPromotionProductExist(productName);
     }
 }
