@@ -23,20 +23,20 @@ public class MainController {
     public void run() {
         initController.initPromotions();
         initController.initProducts();
-        buy();
+        buyProductAction();
     }
 
-    private void buy() {
+    private void buyProductAction() {
         do {
             printProductInfo();
             ProductOrderList buyProducts = productOrderController.orderProduct();
             int membershipDiscount = membershipController.calculateMembershipDisCount(buyProducts.getProductOrderList());
             ReceiptDto receipt = receiptController.generateReceipt(buyProducts, membershipDiscount);
             outputView.printReceipt(receipt);
-        } while (reorder());
+        } while (askForReorder());
     }
 
-    private boolean reorder() {
+    private boolean askForReorder() {
         while (true) {
             try {
                 outputView.printReorder();
